@@ -1,11 +1,161 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title>Qring Database Monitor</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <div id="db-monitor" class="container">
+      <h1 class="row mb-4">{{ 'Qring Database Monitor: ' + selectedButton + ', ' + dataCount + ' rows..'}}</h1>
+      <div class="row mb-4">
+        <input type="button" class="btn btn-info col-sm ml-2" @click="showQuestionDb" value="QuestionDB"></input>
+        <input type="button" class="btn btn-info col-sm ml-2" @click="showAnswerDb" value="AnswerDB"></input>
+        <input type="button" class="btn btn-info col-sm ml-2" @click="showTransactionDb" value="TransactionDB"></input>
+        <input type="button" class="btn btn-info col-sm ml-2" @click="showUserDb" value="UserDB"></input>                
+      </div>
+      <table class="table table-bordered" v-if="questionDb.length > 0" v-cloak>
+        <thead>
+          <th>question_id</th>
+          <th>user_id</th>
+          <th>text</th>
+          <th>intent</th>
+          <th>date</th>
+          <th>state</th>
+        </thead>
+        <tbody>
+          <tr v-for="item in questionDb">
+            <td>{{ item.question_id }}</td>
+            <td>{{ item.user_id }}</td>
+            <td>{{ item.text }}</td>
+            <td>{{ item.intent }}</td>
+            <td>{{ item.date }}</td>
+            <td>{{ item.state }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table table-bordered" v-if="answerDb.length > 0" v-cloak>
+          <thead>
+            <th>answer_id</th>
+            <th>user_id</th>
+            <th>text</th>
+            <th>date</th>
+          </thead>
+          <tbody>
+            <tr v-for="item in answerDb">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table table-bordered" v-if="transactionDb.length > 0" v-cloak>
+            <thead>
+              <th>tx_id</th>
+              <th>tx_from</th>
+              <th>tx_to</th>
+              <th>amount</th>
+            </thead>
+            <tbody>
+              <tr v-for="item in transactionDb">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table table-bordered" v-if="userDb.length > 0" v-cloak>
+              <thead>
+                <th>user_id</th>
+                <th>user_key</th>
+                <th>state</th>
+                <th>user_platform</th>
+                <th>date</th>
+              </thead>
+              <tbody>
+                <tr v-for="item in userDb">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>      
+    </div>
   </body>
+  <script>
+    let vm = new Vue({
+      el: "#db-monitor",
+      data: {
+        selectedButton: "No Selected DB",
+        dataCount: 0,
+        questionDb: [],
+        answerDb: [],
+        transactionDb: [],
+        userDb: []
+      },
+      methods: {
+        showQuestionDb: function () {
+          this.selectedButton = "QuestionDB";
+          this.answerDb = [];
+          this.transactionDb = [];
+          this.userDb = [];
+          axios.get("/question")
+          .then(function(result){
+            vm.questionDb = result.data;
+            vm.dataCount = result.data.length;
+          }).catch(function(ex){
+            console.log(ex);
+          });
+        },
+        showAnswerDb: function () {
+          this.selectedButton = "AnswerDB";
+          this.questionDb = [];
+          this.transactionDb = [];
+          this.userDb = [];
+          axios.get("/answer")
+          .then(function(result){
+            vm.answerDb = result.data;
+            vm.dataCount = result.data.length;            
+          }).catch(function(ex){
+            console.log(ex);
+          });
+        },
+        showTransactionDb: function () {
+          this.selectedButton = "TransactionDB";
+          this.questionDb = [];
+          this.answerDb = [];
+          this.userDb = [];
+          axios.get("/transaction")
+          .then(function(result){
+            vm.transactionDb = result.data;
+            vm.dataCount = result.data.length;            
+          }).catch(function(ex){
+            console.log(ex);
+          });
+        },
+        showUserDb: function () {
+          this.selectedButton = "UserDB";
+          this.questionDb = [];
+          this.answerDb = [];
+          this.transactionDb = [];
+          axios.get("/user")
+          .then(function(result){
+            vm.userDb = result.data;
+            vm.dataCount = result.data.length;            
+          }).catch(function(ex){
+            console.log(ex);
+          });
+        }
+      }
+    });
+  </script>
 </html>
