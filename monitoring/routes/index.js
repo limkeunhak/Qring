@@ -13,8 +13,7 @@ router.get("/question", function(req, res, next) {
     if (!err) {
       res.status(200).json(rows);
     } else {
-        console.log('query error : ' + err);
-        res.send(err);
+      res.send(err);
     }
   });
 });
@@ -24,8 +23,7 @@ router.get("/answer", function(req, res, next) {
     if (!err) {
       res.status(200).json(rows);
     } else {
-        console.log('query error : ' + err);
-        res.send(err);
+      res.send(err);
     }
   });
 });
@@ -33,11 +31,9 @@ router.get("/answer", function(req, res, next) {
 router.get("/transaction", function(req, res, next) {
   mysqlDB.query("select * from qring_tx_history_tbl", function (err, rows, fields) {
     if (!err) {
-      console.log(rows);
       res.status(200).json(rows);
     } else {
-        console.log('query error : ' + err);
-        res.send(err);
+      res.send(err);
     }
   });
 });
@@ -47,8 +43,7 @@ router.get("/user", function(req, res, next) {
     if (!err) {
       res.status(200).json(rows);
     } else {
-        console.log('query error : ' + err);
-        res.send(err);
+      res.send(err);
     }
   });
 });
