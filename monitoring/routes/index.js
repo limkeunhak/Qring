@@ -1,5 +1,5 @@
 let express = require('express');
-let mysqlDB = require('./mysql-db');
+let mysqlDB = require('./qring_db');
 mysqlDB.connect();
 let router = express.Router();
 
@@ -11,12 +11,7 @@ router.get('/', function(req, res, next) {
 router.get("/question", function(req, res, next) {
   mysqlDB.query("select * from qring_question_tbl", function (err, rows, fields) {
     if (!err) {
-      console.log(rows);
-      console.log(fields);
-      var result = 'rows : ' + JSON.stringify(rows) + '<br><br>' +
-          'fields : ' + JSON.stringify(fields);
-//      res.send(result);
-      res.status(200).json([{ question_id:"!!", user_id:"!@@", text:"#D", intent:"DD", date:"ddd", state:"@31"}]);
+      res.status(200).json(rows);
     } else {
         console.log('query error : ' + err);
         res.send(err);
@@ -25,15 +20,37 @@ router.get("/question", function(req, res, next) {
 });
 
 router.get("/answer", function(req, res, next) {
-  res.status(200).json();
+  mysqlDB.query("select * from qring_answer_tbl", function (err, rows, fields) {
+    if (!err) {
+      res.status(200).json(rows);
+    } else {
+        console.log('query error : ' + err);
+        res.send(err);
+    }
+  });
 });
 
 router.get("/transaction", function(req, res, next) {
-  res.status(200).json();
+  mysqlDB.query("select * from qring_tx_history_tbl", function (err, rows, fields) {
+    if (!err) {
+      console.log(rows);
+      res.status(200).json(rows);
+    } else {
+        console.log('query error : ' + err);
+        res.send(err);
+    }
+  });
 });
 
 router.get("/user", function(req, res, next) {
-  res.status(200).json();
+  mysqlDB.query("select * from qring_user_tbl", function (err, rows, fields) {
+    if (!err) {
+      res.status(200).json(rows);
+    } else {
+        console.log('query error : ' + err);
+        res.send(err);
+    }
+  });
 });
 
 module.exports = router;

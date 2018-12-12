@@ -48,10 +48,10 @@
           </thead>
           <tbody>
             <tr v-for="item in answerDb">
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>{{ item.answer_id }}</td>
+              <td>{{ item.user_id }}</td>
+              <td>{{ item.text }}</td>
+              <td>{{ item.date }}</td>
             </tr>
           </tbody>
         </table>
@@ -64,10 +64,10 @@
             </thead>
             <tbody>
               <tr v-for="item in transactionDb">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ item.tx_id }}</td>
+                <td>{{ item.tx_from }}</td>
+                <td>{{ item.tx_to }}</td>
+                <td>{{ item.amount }}</td>
               </tr>
             </tbody>
           </table>
@@ -81,11 +81,11 @@
               </thead>
               <tbody>
                 <tr v-for="item in userDb">
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                  <td>{{ item.user_id }}</td>
+                  <td>{{ item.user_key }}</td>
+                  <td>{{ item.state }}</td>
+                  <td>{{ item.user_platform }}</td>
+                  <td>{{ item.date }}</td>
                 </tr>
               </tbody>
             </table>      
@@ -110,6 +110,7 @@
           this.userDb = [];
           axios.get("/question")
           .then(function(result){
+		    console.log(result.data);
             vm.questionDb = result.data;
             vm.dataCount = result.data.length;
           }).catch(function(ex){
@@ -123,6 +124,7 @@
           this.userDb = [];
           axios.get("/answer")
           .then(function(result){
+		    console.log(result.data);
             vm.answerDb = result.data;
             vm.dataCount = result.data.length;            
           }).catch(function(ex){
@@ -136,6 +138,7 @@
           this.userDb = [];
           axios.get("/transaction")
           .then(function(result){
+		    console.log(result.data);
             vm.transactionDb = result.data;
             vm.dataCount = result.data.length;            
           }).catch(function(ex){
@@ -149,6 +152,7 @@
           this.transactionDb = [];
           axios.get("/user")
           .then(function(result){
+		    console.log(result.data);
             vm.userDb = result.data;
             vm.dataCount = result.data.length;            
           }).catch(function(ex){
