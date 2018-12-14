@@ -40,58 +40,68 @@
         </tbody>
       </table>
       <table class="table table-bordered" v-if="answerDb.length > 0" v-cloak>
-          <thead>
-            <th>answer_id</th>
-            <th>user_id</th>
-            <th>text</th>
-            <th>date</th>
-          </thead>
-          <tbody>
-            <tr v-for="item in answerDb">
-              <td>{{ item.answer_id }}</td>
-              <td>{{ item.user_id }}</td>
-              <td>{{ item.text }}</td>
-              <td>{{ item.date }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <table class="table table-bordered" v-if="transactionDb.length > 0" v-cloak>
-            <thead>
-              <th>tx_id</th>
-              <th>tx_from</th>
-              <th>tx_to</th>
-              <th>amount</th>
-            </thead>
-            <tbody>
-              <tr v-for="item in transactionDb">
-                <td>{{ item.tx_id }}</td>
-                <td>{{ item.tx_from }}</td>
-                <td>{{ item.tx_to }}</td>
-                <td>{{ item.amount }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="table table-bordered" v-if="userDb.length > 0" v-cloak>
-              <thead>
-                <th>user_id</th>
-                <th>user_key</th>
-                <th>state</th>
-                <th>user_platform</th>
-                <th>date</th>
-              </thead>
-              <tbody>
-                <tr v-for="item in userDb">
-                  <td>{{ item.user_id }}</td>
-                  <td>{{ item.user_key }}</td>
-                  <td>{{ item.state }}</td>
-                  <td>{{ item.user_platform }}</td>
-                  <td>{{ item.date }}</td>
-                </tr>
-              </tbody>
-            </table>      
+        <thead>
+          <th>answer_id</th>
+          <th>user_id</th>
+          <th>text</th>
+          <th>date</th>
+        </thead>
+        <tbody>
+          <tr v-for="item in answerDb">
+            <td>{{ item.answer_id }}</td>
+            <td>{{ item.user_id }}</td>
+            <td>{{ item.text }}</td>
+            <td>{{ item.date }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table table-bordered" v-if="transactionDb.length > 0" v-cloak>
+        <thead>
+          <th>tx_id</th>
+          <th>tx_from</th>
+          <th>tx_to</th>
+          <th>amount</th>
+        </thead>
+        <tbody>
+          <tr v-for="item in transactionDb">
+            <td>{{ item.tx_id }}</td>
+            <td>{{ item.tx_from }}</td>
+            <td>{{ item.tx_to }}</td>
+            <td>{{ item.amount }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table table-bordered" v-if="userDb.length > 0" v-cloak>
+        <thead>
+          <th>user_id</th>
+          <th>user_key</th>
+          <th>state</th>
+          <th>user_platform</th>
+          <th>date</th>
+        </thead>
+        <tbody>
+          <tr v-for="item in userDb">
+            <td>{{ item.user_id }}</td>
+            <td>{{ item.user_key }}</td>
+            <td>{{ item.state }}</td>
+            <td>{{ item.user_platform }}</td>
+            <td>{{ item.date }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <paginate
+        :page-count="pageCount"
+        :click-handler="pageClick"
+        :prev-text="'Prev'"
+        :next-text="'Next'"
+        :container-class="'pagination'">
+      </paginate> 
     </div>
   </body>
   <script>
+    Vue.component('paginate', VuejsPaginate);
+    const PAGE_SIZE = 20;
+
     let vm = new Vue({
       el: "#db-monitor",
       data: {
@@ -100,7 +110,8 @@
         questionDb: [],
         answerDb: [],
         transactionDb: [],
-        userDb: []
+        userDb: [],
+        pageCount: 1
       },
       methods: {
         showQuestionDb: function () {
@@ -110,9 +121,10 @@
           this.userDb = [];
           axios.get("/question")
           .then(function(result){
-		    console.log(result.data);
+		        console.log(result.data);
             vm.questionDb = result.data;
             vm.dataCount = result.data.length;
+            vm.pageCount = ((vm.dataCount - 1) / PAGE_SIZE) + 1;
           }).catch(function(ex){
             console.log(ex);
           });
@@ -124,9 +136,10 @@
           this.userDb = [];
           axios.get("/answer")
           .then(function(result){
-		    console.log(result.data);
+            console.log(result.data);
             vm.answerDb = result.data;
-            vm.dataCount = result.data.length;            
+            vm.dataCount = result.data.length;
+            vm.pageCount = ((vm.dataCount - 1) / PAGE_SIZE) + 1;
           }).catch(function(ex){
             console.log(ex);
           });
@@ -138,9 +151,10 @@
           this.userDb = [];
           axios.get("/transaction")
           .then(function(result){
-		    console.log(result.data);
+		        console.log(result.data);
             vm.transactionDb = result.data;
-            vm.dataCount = result.data.length;            
+            vm.dataCount = result.data.length;
+            vm.pageCount = ((vm.dataCount - 1) / PAGE_SIZE) + 1;
           }).catch(function(ex){
             console.log(ex);
           });
@@ -152,12 +166,16 @@
           this.transactionDb = [];
           axios.get("/user")
           .then(function(result){
-		    console.log(result.data);
+		        console.log(result.data);
             vm.userDb = result.data;
-            vm.dataCount = result.data.length;            
+            vm.dataCount = result.data.length;
+            vm.pageCount = ((vm.dataCount - 1) / PAGE_SIZE) + 1;
           }).catch(function(ex){
             console.log(ex);
           });
+        },
+        pageClick: function (page) { 
+          console.log(page);
         }
       }
     });
