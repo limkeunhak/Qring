@@ -6,14 +6,13 @@ mysqlDB.connect();
 /* GET user info. by user key & platform*/
 router.get('/', function(req, res, next) {
   let userKey = req.query.userKey;
-  let userPlatform = req.query.userPlatform;
+//  let userPlatform = req.query.userPlatform;
   
-  if (!userKey || !userPlatform) {
+  if (!userKey) {
     res.status(400).json({ resultCode: 400, resultState:'You should check parameters'});
     return;
   }
-  let queryString = "select * from qring_user_tbl where user_key = "
-   + userKey + " and user_platform = " + userPlatform;
+  let queryString = 'select * from qring_user_tbl where user_key = "' + userKey + '"';
   mysqlDB.query(queryString, function (err, rows, fields) {
     if (!err) {
       res.status(200).json(rows);
@@ -25,6 +24,7 @@ router.get('/', function(req, res, next) {
 
 /* POST new Qring user */
 router.post('/', function(req, res, next) {
+  console.log(req.body);
   let userKey = req.body.userKey;
   let userPlatform = req.body.userPlatform;
   let registDate = req.body.date;
@@ -32,7 +32,8 @@ router.post('/', function(req, res, next) {
 
   // TODO: Check whether this user aleady exist or not
 
-  let queryString = "...";
+  let queryString = `insert into qring_user_tbl (user_key, state, user_platform, date) values (\'${userKey}\', \'${state}\', \'${userPlatform}\', \'${registDate}\')`;
+  console.log(queryString);
   mysqlDB.query(queryString, function (err, rows, fields) {
     if (!err) {
       res.status(200).json(rows);
@@ -48,7 +49,7 @@ router.delete('/', function(req, res, next) {
 
   // TODO: Check whether this user aleady exist or not
 
-  let queryString = "...";
+  let queryString = "delete from qring_user_tbl where user_key = '" + userKey + "'";
   mysqlDB.query(queryString, function (err, rows, fields) {
     if (!err) {
       res.status(200).json(rows);
