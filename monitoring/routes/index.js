@@ -1,5 +1,5 @@
 let express = require('express');
-let mysqlDB = require('../utils-db/qring_db');
+let mysqlDB = require('../utils/qring_db');
 mysqlDB.connect();
 let router = express.Router();
 
