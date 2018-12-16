@@ -23,6 +23,25 @@ router.get('/', function(req, res, next) {
   });
 });
 
+/* GET user info. by user key & platform*/
+router.get('/state', function(req, res, next) {
+  let userKey = req.query.userKey;
+//  let userPlatform = req.query.userPlatform;
+  
+  if (!userKey) {
+    res.status(400).json({ resultCode: 400, resultState:'You should check parameters'});
+    return;
+  }
+  let queryString = 'select state from qring_user_tbl where user_key = "' + userKey + '"';
+  mysqlDB.query(queryString, function (err, rows, fields) {
+    if (!err) {
+      res.status(200).json(rows);
+    } else {
+      res.send(err);
+    }
+  });
+});
+
 /* POST new Qring user */
 router.post('/', function(req, res, next) {
   let userKey = req.body.userKey;
