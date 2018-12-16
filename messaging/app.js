@@ -19,8 +19,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/messaging/kakao', kakaoRouter);
-app.use('/messaging/line', lineRouter);
+app.use('/webhook/kakao', kakaoRouter);
+app.use('/webhook/line', lineRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

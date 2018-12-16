@@ -2,14 +2,13 @@ const express = require('express');
 const kakaoChat = require('../chat/kakao-chat');
 const router = express.Router();
 
-router.get('/keyword', kakaoChat.enterChatroom);
+router.get('/keyboard', kakaoChat.enterChatroom);
 
-router.get('/message', kakaoChat.sendMessage);
+router.post('/message', kakaoChat.getMessageFromUser);
 
-router.get('/friend', kakaoChat.registPlusFriend);
+router.post('/friend', kakaoChat.registUser);
+router.delete('/friend/:userKey', kakaoChat.deleteUser);
 
-router.get('/chat_room', function(req, res, next) {
-  res.status(200).json({ title: 'kakao' });
-});
+router.delete('/chat_room/:userKey', kakaoChat.exitChatroom);
 
 module.exports = router;
