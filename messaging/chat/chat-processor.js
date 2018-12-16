@@ -65,6 +65,7 @@ processor.respondMessage = async (userKey, state, content, callback) => {
 	} else if (currentState ==  config.USER_STATES.Q_ACTIVE) {
 		await updateUser(userKey, config.USER_STATES.Q_INACTIVE);
 		// TODO: regist question
+		await insertQuestion(userKey, content);
 		resMsg = getMessage(config.QANY_MSG_CONSTANTS.QACTIVE_TO_QINACTIVE);
 	} else if (currentState == config.USER_STATES.A_INACTIVE) {
 		if (content == "알려줄께") {		// TODO: Apply Dialogflow
@@ -103,4 +104,8 @@ function getMessage(messagePool) {
 
 function updateUser(userKey, state) {
 	return axios.put(config.MEMBER_SERVER_URL, { userKey: userKey, state: state });
+}
+
+function insertQuestion(userKey, text) {
+	return axios.post(config.QNA_SERVER_URL + "/question", { userKey: userKey, text:text });
 }

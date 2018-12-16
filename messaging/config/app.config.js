@@ -23,6 +23,7 @@ module.exports = {
         }
     },
 	MEMBER_SERVER_URL: "http://127.0.0.1:30060/users",
+	QNA_SERVER_URL: "http://127.0.0.1:30030/qna",
     USER_PLATFORM: {
         LINE: 'L',
         KAKAO: 'K',
