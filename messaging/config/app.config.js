@@ -10,15 +10,12 @@ module.exports = {
         AACTIVE_TO_QINACTIVE: [],
         TO_TERMINATE: [],
         GLOBAL_COMMAND_LIST: {
-            USER_INFO:"/내정보",
-            SYSTEM_INFO:"/서비스정보",
-            MENUAL: "/사용법"
-        },
-        MENUAL: "",
-        USER_INFO: "",
-        SYSTEM_INFO: "",
+			USER_INFO: { COMMAND: "/내정보", RESPONSE: "현재 서비스 준비중입니다." },
+            SYSTEM_INFO: { COMMAND: "/서비스정보", RESPONSE: "Qring version 0.0.1" },
+            MENUAL: { COMMAND: "/사용법", RESPONSE: "챗봇 기반 질의응답 플랫폼 'Qring' 사용법"}
+        }
     },
-    MEMBER_SERVER_URL: "localhost:30060/users",
+	MEMBER_SERVER_URL: "http://127.0.0.1:30060/users",
     USER_PLATFORM: {
         LINE: 'L',
         KAKAO: 'K'

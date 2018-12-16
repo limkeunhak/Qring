@@ -1,4 +1,5 @@
 const axios = require('axios');
+const _ = require('lodash');
 const config = require('../config/app.config');
 
 const processor = {};
@@ -17,6 +18,18 @@ processor.saveUser = (userKey, userPlatform) => {
     }).catch((ex) => {
         console.log(ex);
     });
+};
+
+processor.processCommands = (command) => {
+	let existingCommands = _.values(config.QANY_MSG_CONSTANTS.GLOBAL_COMMAND_LIST);
+	let index = _.findIndex(existingCommands, function(o) { return o.COMMAND == command });
+
+	if (index == -1) {
+		return { isCommand: false, responseMessage: '' };
+	} else {
+		return { isCommand: true, responseMessage: existingCommands[index].RESPONSE };
+	}
+
 };
 
 processor.saveQuestion = () => {

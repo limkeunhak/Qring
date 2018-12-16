@@ -8,11 +8,20 @@ kakaoChat.enterChatroom = (req, res) => {
 };
 
 kakaoChat.getMessageFromUser = (req, res) => {
-    console.log(req.body);
-    chatProcessor.saveUser(req.body.userKey, config.USER_PLATFORM.KAKAO);
+	let commandResults = chatProcessor.processCommands(req.body.content);
+	
+	// Pre-defined command processing
+	if (commandResults.isCommand) {
+		res.status(200).json({ message: { text: commandResults.responseMessage }});
+		
+	// General message processing
+	} else {
+		chatProcessor.saveUser(req.body.user_key, config.USER_PLATFORM.KAKAO);
+		res.status(200).json({ message: { text: "등록!" }});
+	}
+
     // TODO
 
-    res.status(200).json({ message: { text: "등록!" }});
 };
 
 kakaoChat.registUser = (req, res) => {
