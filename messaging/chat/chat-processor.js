@@ -1,20 +1,25 @@
 
 const processor = {};
 
+// Enter into chatroom
 processor.enter = () => {
-
+    // TODO
 };
 
-processor.sendMsg = () => {
-
+processor.saveUser = () => {
+    // TODO
 };
 
-processor.receiveMsg = () => {
+processor.saveQuestion = () => {
+    // TODO
+};
 
+processor.saveAnswer = () => {
+    // TODO
 };
 
 processor.exit = () => {
-
+    // TODO
 };
 
 module.exports = processor;
