@@ -1,4 +1,5 @@
 const express = require('express');
+const config = require('../config/app.config');
 const router = express.Router();
 let mysqlDB = require('../utils/qring_db');
 mysqlDB.connect();
@@ -24,31 +25,29 @@ router.get('/', function(req, res, next) {
 
 /* POST new Qring user */
 router.post('/', function(req, res, next) {
-  console.log(req.body);
   let userKey = req.body.userKey;
   let userPlatform = req.body.userPlatform;
   let registDate = new Date();
-  let state = null;
+  let state = config.USER_STATE.Q_INACTIVE;
 
-  // TODO: Check whether this user aleady exist or not
-  mysqlDB.query(`select TOP 1 * from qring_user_tbl where user_key = '${userKey}'`, function (err, rows, fields) {
+  mysqlDB.query(`select COUNT(*) as isExist from qring_user_tbl where user_key = '${userKey}'`, function (err, rows, fields) {
     if (err) {
       res.status(400).json(err);
     } else {
-      console.log(rows);
+	  if (!rows[0].isExist) {
+
+		let queryString = `insert into qring_user_tbl (user_key, state, user_platform, date) values (\'${userKey}\', \'${state}\', \'${userPlatform}\', \'${registDate}\')`;
+		console.log(queryString);
+		mysqlDB.query(queryString, function (err, rows, fields) {
+			if (!err) {
+				res.status(200).json(rows);
+			} else {
+				res.send(err);
+			}
+		});
+	  }
     }
   })
-/*
-  let queryString = `insert into qring_user_tbl (user_key, state, user_platform, date) values (\'${userKey}\', \'${state}\', \'${userPlatform}\', \'${registDate}\')`;
-  console.log(queryString);
-  mysqlDB.query(queryString, function (err, rows, fields) {
-    if (!err) {
-      res.status(200).json(rows);
-    } else {
-      res.send(err);
-    }
-  });
-  */
 });
 
 /* DELETE user info. */
