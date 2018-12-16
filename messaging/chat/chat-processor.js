@@ -46,7 +46,7 @@ processor.processCommands = (command) => {
 
 };
 
-processor.respondMessage = (userKey, state, content, callback) => {
+processor.respondMessage = async (userKey, state, content, callback) => {
 	let currentState = state;
 
 	// 2-1. if Q_INACTIVE, then determines whether the current message is a trigger message or not.
@@ -56,24 +56,27 @@ processor.respondMessage = (userKey, state, content, callback) => {
 
 	let resMsg = null;
 	if (currentState == config.USER_STATES.Q_INACTIVE) {
-		if (content != "질문하고싶어") {	// TODO: Apply Dialogflow
-			resMsg = getMessage(config.QANY_MSG_CONSTANTS.QINACTIVE_TO_QINACTIVE);
-		} else {
+		if (content == "질문하고싶어") {	// TODO: Apply Dialogflow
+			await updateUser(userKey, config.USER_STATES.Q_ACTIVE);
 			resMsg = getMessage(config.QANY_MSG_CONSTANTS.QINACTIVE_TO_QACTIVE);
-			// TODO: state transition (to Q_ACTIVE)
+		} else {
+			resMsg = getMessage(config.QANY_MSG_CONSTANTS.QINACTIVE_TO_QINACTIVE);
 		}
 	} else if (currentState ==  config.USER_STATES.Q_ACTIVE) {
-		// TODO: state transition, regist question
+		await updateUser(userKey, config.USER_STATES.Q_INACTIVE);
+		// TODO: regist question
 		resMsg = getMessage(config.QANY_MSG_CONSTANTS.QACTIVE_TO_QINACTIVE);
 	} else if (currentState == config.USER_STATES.A_INACTIVE) {
-		if (content != "알려줄께") {		// TODO: Apply Dialogflow
-			resMsg = getMessage(config.QANY_MSG_CONSTANTS.AINACTIVE_TO_AACTIVE);
-		} else {
-			// TODO: state transition (to Q_INACTIVE)
+		if (content == "알려줄께") {		// TODO: Apply Dialogflow
+			await updateUser(userKey, config.USER_STATES.A_ACTIVE);
 			resMsg = getMessage(config.QANY_MSG_CONSTANTS.AINACTIVE_TO_QINACTIVE);
+		} else {
+			await updateUser(userKey, config.USER_STATES.Q_INACTIVE);
+			resMsg = getMessage(config.QANY_MSG_CONSTANTS.AINACTIVE_TO_AACTIVE);
 		}
 	} else if (currentState == config.USER_STATES.A_ACTIVE) {
-		// TODO: state transition (to Q_INACTIVE)
+		await updateUser(userKey, config.USER_STATES.Q_INACTIVE);
+		// TODO: regist answer
 		resMsg = getMessage(config.QANY_MSG_CONSTANTS.AACTIVE_TO_QINACTIVE);
 	}
 
@@ -96,4 +99,8 @@ module.exports = processor;
 
 function getMessage(messagePool) {
 	return messagePool[Math.floor(Math.random() * messagePool.length)];
+}
+
+function updateUser(userKey, state) {
+	return axios.put(config.MEMBER_SERVER_URL, { userKey: userKey, state: state });
 }
