@@ -23,7 +23,7 @@
       <table class="table table-bordered" v-if="questionDb.length > 0" v-cloak>
         <thead>
           <th>question_id</th>
-          <th>user_id</th>
+          <th>user_key</th>
           <th>text</th>
           <th>intent</th>
           <th>date</th>
@@ -32,7 +32,7 @@
         <tbody>
           <tr v-for="item in questionDb">
             <td>{{ item.question_id }}</td>
-            <td>{{ item.user_id }}</td>
+            <td>{{ item.user_key }}</td>
             <td>{{ item.text }}</td>
             <td>{{ item.intent }}</td>
             <td>{{ item.date }}</td>
