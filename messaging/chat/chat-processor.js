@@ -48,27 +48,36 @@ processor.processCommands = (command) => {
 
 processor.respondMessage = (userKey, state, content, callback) => {
 	let currentState = state;
-	console.log(currentState);
 
 	// 2-1. if Q_INACTIVE, then determines whether the current message is a trigger message or not.
 	// 3-1. if Q_ACTIVE, regist the message into qna server as question.
 	// 4-1. if A_INACTIVE, ask whether or not to answer the question.
 	// 5-1. if A_ACTIVE, regist this message into qna server as answer.
 
+	let resMsg = null;
 	if (currentState == config.USER_STATES.Q_INACTIVE) {
-
-		callback("테스트!");
+		if (content != "질문하고싶어") {	// TODO: Apply Dialogflow
+			resMsg = getMessage(config.QANY_MSG_CONSTANTS.QINACTIVE_TO_QINACTIVE);
+		} else {
+			resMsg = getMessage(config.QANY_MSG_CONSTANTS.QINACTIVE_TO_QACTIVE);
+			// TODO: state transition (to Q_ACTIVE)
+		}
 	} else if (currentState ==  config.USER_STATES.Q_ACTIVE) {
-
-		callback("테스트!");
+		// TODO: state transition, regist question
+		resMsg = getMessage(config.QANY_MSG_CONSTANTS.QACTIVE_TO_QINACTIVE);
 	} else if (currentState == config.USER_STATES.A_INACTIVE) {
-
-		callback("테스트!");
+		if (content != "알려줄께") {		// TODO: Apply Dialogflow
+			resMsg = getMessage(config.QANY_MSG_CONSTANTS.AINACTIVE_TO_AACTIVE);
+		} else {
+			// TODO: state transition (to Q_INACTIVE)
+			resMsg = getMessage(config.QANY_MSG_CONSTANTS.AINACTIVE_TO_QINACTIVE);
+		}
 	} else if (currentState == config.USER_STATES.A_ACTIVE) {
-
-		callback("테스트!");
+		// TODO: state transition (to Q_INACTIVE)
+		resMsg = getMessage(config.QANY_MSG_CONSTANTS.AACTIVE_TO_QINACTIVE);
 	}
-	callback("테스트!");
+
+	callback(resMsg);
 }
 
 processor.saveQuestion = () => {
@@ -84,3 +93,7 @@ processor.exit = () => {
 };
 
 module.exports = processor;
+
+function getMessage(messagePool) {
+	return messagePool[Math.floor(Math.random() * messagePool.length)];
+}

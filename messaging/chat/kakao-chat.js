@@ -27,6 +27,7 @@ kakaoChat.getMessageFromUser = async (req, res) => {
 				res.status(200).json({ message: { text: responseMessage }});
 			});
 		} else {
+			userState = userState[0].state;
 			chatProcessor.respondMessage(req.body.user_key, userState, req.body.content, (responseMessage) => {
 				res.status(200).json({ message: { text: responseMessage }});
 			});
