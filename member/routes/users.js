@@ -27,11 +27,18 @@ router.post('/', function(req, res, next) {
   console.log(req.body);
   let userKey = req.body.userKey;
   let userPlatform = req.body.userPlatform;
-  let registDate = req.body.date;
-  let state = req.body.state;
+  let registDate = new Date();
+  let state = null;
 
   // TODO: Check whether this user aleady exist or not
-
+  mysqlDB.query(`select TOP 1 * from qring_user_tbl where user_key = '${userKey}'`, function (err, rows, fields) {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      console.log(rows);
+    }
+  })
+/*
   let queryString = `insert into qring_user_tbl (user_key, state, user_platform, date) values (\'${userKey}\', \'${state}\', \'${userPlatform}\', \'${registDate}\')`;
   console.log(queryString);
   mysqlDB.query(queryString, function (err, rows, fields) {
@@ -41,6 +48,7 @@ router.post('/', function(req, res, next) {
       res.send(err);
     }
   });
+  */
 });
 
 /* DELETE user info. */

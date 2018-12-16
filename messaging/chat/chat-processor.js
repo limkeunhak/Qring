@@ -9,7 +9,6 @@ processor.enter = () => {
 };
 
 processor.saveUser = (userKey, userPlatform) => {
-    // TODO
     axios.post(config.MEMBER_SERVER_URL, {
         userKey: userKey,
         userPlatform: userPlatform
