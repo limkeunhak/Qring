@@ -20,6 +20,10 @@ processor.saveUser = (userKey, userPlatform) => {
     });
 };
 
+processor.getUserStateInPromise = (userKey) => {
+	return axios.get(config.MEMBER_SERVER_URL + "/state?userKey=" + userKey);
+};
+
 processor.processCommands = (command) => {
 	let existingCommands = _.values(config.QANY_MSG_CONSTANTS.GLOBAL_COMMAND_LIST);
 	let index = _.findIndex(existingCommands, function(o) { return o.COMMAND == command });
