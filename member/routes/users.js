@@ -69,6 +69,23 @@ router.post('/', function(req, res, next) {
   })
 });
 
+/* UPDATE user info. */
+router.put('/', function(req, res, next) {
+  let userKey = req.body.userKey;
+  let state = req.body.state;
+
+  // TODO: Check whether this user aleady exist or not
+
+  let queryString = "update qring_user_tbl set state = '" + state + "' where user_key = '" + userKey + "'";
+  mysqlDB.query(queryString, function (err, rows, fields) {
+    if (!err) {
+      res.status(200).json(rows);
+    } else {
+      res.send(err);
+    }
+  });
+});
+
 /* DELETE user info. */
 router.delete('/', function(req, res, next) {
   let userKey = req.body.userKey;
