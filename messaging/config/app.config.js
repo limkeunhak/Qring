@@ -16,6 +16,11 @@ module.exports = {
         },
         MENUAL: "",
         USER_INFO: "",
-        SYSTEM_INFO: ""
+        SYSTEM_INFO: "",
+    },
+    MEMBER_SERVER_URL: "localhost:30060/users",
+    USER_PLATFORM: {
+        LINE: 'L',
+        KAKAO: 'K'
     }
 };

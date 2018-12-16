@@ -1,3 +1,5 @@
+const axios = require('axios');
+const config = require('../config/app.config');
 
 const processor = {};
 
@@ -6,8 +8,16 @@ processor.enter = () => {
     // TODO
 };
 
-processor.saveUser = () => {
+processor.saveUser = (userKey, userPlatform) => {
     // TODO
+    axios.post(config.MEMBER_SERVER_URL, {
+        userKey: userKey,
+        userPlatform: userPlatform
+    }).then((result) => {
+        console.log(result);
+    }).catch((ex) => {
+        console.log(ex);
+    });
 };
 
 processor.saveQuestion = () => {

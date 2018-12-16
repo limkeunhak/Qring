@@ -1,4 +1,5 @@
 const chatProcessor = require('./chat-processor');
+const config = require('../config/app.config');
 const kakaoChat = {};
 
 kakaoChat.enterChatroom = (req, res) => {
@@ -8,8 +9,10 @@ kakaoChat.enterChatroom = (req, res) => {
 
 kakaoChat.getMessageFromUser = (req, res) => {
     console.log(req.body);
-	res.status(200).json({ message: { text: "등록!" }});
+    chatProcessor.saveUser(req.body.userKey, config.USER_PLATFORM.KAKAO);
     // TODO
+
+    res.status(200).json({ message: { text: "등록!" }});
 };
 
 kakaoChat.registUser = (req, res) => {
