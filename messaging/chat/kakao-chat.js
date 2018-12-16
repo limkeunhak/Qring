@@ -23,35 +23,33 @@ kakaoChat.getMessageFromUser = async (req, res) => {
 	try {
 		userState = (await chatProcessor.getUserStateInPromise(req.body.user_key)).data;
 		if (!userState || userState.length == 0) {
-			chatProcessor.saveUser(req.body.user_key, config.USER_PLATFORM.KAKAO);
-			userState = "Q_INACTIVE";
+			chatProcessor.saveUser(req.body.user_key, config.USER_PLATFORM.KAKAO, (responseMessage) => {	
+				res.status(200).json({ message: { text: responseMessage }});
+			});
+		} else {
+			chatProcessor.respondMessage(req.body.user_key, userState, req.body.content, (responseMessage) => {
+				res.status(200).json({ message: { text: responseMessage }});
+			});
 		}
 	} catch (ex) {
 		console.log(ex);
 	}
-	// 2-1. if Q_INACTIVE, then determines whether the current message is a trigger message or not.
-	// 3-1. if Q_ACTIVE, regist the message into qna server as question.
-	// 4-1. if A_INACTIVE, ask whether or not to answer the question.
-	// 5-1. if A_ACTIVE, regist this message into qna server as answer.
-	res.status(200).json({ message: { text: "등록!" }});
-    // TODO
-
 };
 
 kakaoChat.registUser = (req, res) => {
     console.log(req.body);
-	res.status(200);
+	res.status(200).json({ code:0, message:"SUCCESS", comment:"정상 응답" });
     // TODO
 };
 
 kakaoChat.deleteUser = (req, res) => {
 	console.log(req.body);
-	res.status(200);
+	res.status(200).json({ code:0, message:"SUCCESS", comment:"정상 응답" });
 	// TODO
 };
 
 kakaoChat.exitChatroom = (req, res) => {
-	console.log(req.params);
+	chatProcessor.deleteUser(req.params.userKey);
 	res.status(200).json({ code:0, message:"SUCCESS", comment:"정상 응답" });
 	// TODO
 };
