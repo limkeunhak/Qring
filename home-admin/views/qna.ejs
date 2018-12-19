@@ -113,7 +113,13 @@
       questins: [],
     },
     mounted: function () {
-      
+      let that = this;
+      axios.get("/qna/questions")
+      .then(function (result) {
+        console.log(result);
+      }).catch(function (ex) {
+        console.log(ex);
+      })
     },
     methods: {
 
