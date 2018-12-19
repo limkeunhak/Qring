@@ -20,7 +20,7 @@ router.put('/answer', function(req, res, next) {
 });
 
 router.get('/question', function(req, res, next) {
-  mysqlDB.query("select * from qring_question_tbl", function (err, rows, fields) {
+  mysqlDB.query("select * from qring_question_tbl order by question_id desc", function (err, rows, fields) {
     if (!err) {
       res.status(200).json(rows);
     } else {
