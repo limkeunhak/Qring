@@ -10,8 +10,8 @@
             <h2>Active <b>Questions</b></h2>
           </div>
           <div class="col-sm-7">
-            <a href="#" class="btn btn-primary"><i class="material-icons">&#xE147;</i> <span>Add New User</span></a>
-            <a href="#" class="btn btn-primary"><i class="material-icons">&#xE24D;</i> <span>Export to Excel</span></a>						
+            <a href="#" class="btn btn-primary"><i class="material-icons">&#xE147;</i> <span>Add New Question</span></a>
+            <a href="#" class="btn btn-primary"><i class="material-icons">&#xE24D;</i> <span>Question Topic : IT</span></a>						
           </div>
         </div>
       </div>
@@ -24,10 +24,22 @@
               <th>Date Created</th>
               <th>Topic</th>
               <th>Status</th>
-              <th>Action</th>
+              <th>Token</th>
           </tr>
         </thead>
         <tbody>
+		  <tr v-for="(item, index) in questions">
+			<td>{{ item.question_id }}</td>
+			<td>
+				<a href="#"><img src="img/kakao.png" class="avatar" alt="Avatar">{{ item.user_key }}</a>
+			</td>
+			<td>{{ item.text }}</td>
+			<td>{{ item.date }}</td>
+			<td>{{ item.intent }}</td>
+            <td v-if="item.state == 'ACTIVE'"><span class="status text-success">&bull;</span> Active</td>
+            <td v-else><span class="status text-success">&bull;</span> Active</td>
+			<td>333</td>
+		  </tr>
           <tr>
             <td>1</td>
             <td><a href="#"><img src="img/kakao.png" class="avatar" alt="Avatar"> Michael Holz</a></td>
@@ -110,12 +122,14 @@
   let vm = new Vue({
     el: "#question-container",
     data: {
-      questins: [],
+      questions: [],
     },
     mounted: function () {
+	  console.log('!!');
       let that = this;
       axios.get("/qna/questions")
       .then(function (result) {
+		vm.questions = result.data;
         console.log(result);
       }).catch(function (ex) {
         console.log(ex);
