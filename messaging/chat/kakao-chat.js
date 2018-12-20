@@ -30,15 +30,14 @@ kakaoChat.getMessageFromUser = async (req, res) => {
 		} else {
 			userState = userState[0].state;
 			if (userState == config.USER_STATES.Q_ACTIVE) {
-				axios.post('https://api.line.me/v2/bot/message/push', {
+				axios.post({ url: 'https://api.line.me/v2/bot/message/push', data: {
 					"to":"U4dbbc044e1c125e8d45516828b12bb42",
 					"messages":[{"type":"text", "text": message.text }]
-				},
-				{ 
-					headers: {
-						'Authorization': 'Bearer ' + CHANNEL_ACCESS_TOKEN,
-						'Content-Type': 'application/json'
-					}
+				}, 
+				headers: {
+					'Authorization': 'Bearer ' + CHANNEL_ACCESS_TOKEN,
+					'Content-Type': 'application/json'
+				}
 				}).then((result) => {
 					console.log(result);
 				}).catch( ex => {
