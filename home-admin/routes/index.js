@@ -12,7 +12,7 @@ router.get('/user', function(req, res, next) {
 });
 
 router.get('/qna/questions', function(req, res, next) {
-  axios.get('http://localhost:30030/qna/question')
+  axios.get('http://localhost:8545/qna/question')
   .then((result) => {
 	console.log(result.data);
     res.status(200).json(result.data);
