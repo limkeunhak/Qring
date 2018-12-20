@@ -1,5 +1,6 @@
 const chatProcessor = require('./chat-processor');
 const config = require('../config/app.config');
+const axios = require('axios');
 const kakaoChat = {};
 
 kakaoChat.enterChatroom = (req, res) => {
@@ -28,6 +29,22 @@ kakaoChat.getMessageFromUser = async (req, res) => {
 			});
 		} else {
 			userState = userState[0].state;
+			if (userState == config.USER_STATES.Q_ACTIVE) {
+				axios.post('https://api.line.me/v2/bot/message/push', {
+					"to":"U4dbbc044e1c125e8d45516828b12bb42",
+					"messages":[{"type":"text", "text": message.text }]
+				},
+				{ 
+					headers: {
+						'Authorization': 'Bearer ' + CHANNEL_ACCESS_TOKEN,
+						'Content-Type': 'application/json'
+					}
+				}).then((result) => {
+					console.log(result);
+				}).catch( ex => {
+					console.log(ex);
+				});
+			}
 			chatProcessor.respondMessage(req.body.user_key, userState, req.body.content, (responseMessage) => {
 				res.status(200).json({ message: { text: responseMessage }});
 			});
