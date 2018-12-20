@@ -65,12 +65,10 @@
       questions: [],
     },
     mounted: function () {
-	  console.log('!!');
       let that = this;
       axios.get("/qna/questions")
       .then(function (result) {
-		vm.questions = result.data;
-        console.log(result);
+		    vm.questions = result.data;
       }).catch(function (ex) {
         console.log(ex);
       })
