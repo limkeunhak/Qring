@@ -29,6 +29,17 @@ router.get('/question', function(req, res, next) {
   });
 });
 
+router.get('/question2', function(req, res, next) {
+  mysqlDB.query("select * from qring_question_tbl q inner join qring_user_tbl u on q.user_key = u.user_key order by q.question_id desc", 
+  function (err, rows, fields) {
+    if (!err) {
+      res.status(200).json(rows);
+    } else {
+      res.send(err);
+    }
+  });
+});
+
 router.get('/question/:user_key', function(req, res, next) {
   mysqlDB.query(`select * from qring_question_tbl where user_key = '${req.params.user_key}'`, function (err, rows, fields) {
     if (!err) {

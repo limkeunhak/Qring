@@ -31,7 +31,11 @@
           <tr v-for="(item, index) in questions">
             <td>{{ item.question_id }}</td>
             <td>
-              <a href="#"><img src="img/kakao.png" class="avatar" alt="Avatar">{{ item.user_key }}</a>
+              <a href="#">
+                <img src="img/kakao.png" class="avatar" alt="Avatar" v-if="item.user_platform = 'K'">
+                <img src="img/line.png" class="avatar" alt="Avatar" v-else>
+                {{ item.user_key }}
+              </a>
             </td>
             <td>{{ item.text }}</td>
             <td>{{ item.date }}</td>
