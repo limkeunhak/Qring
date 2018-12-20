@@ -2,6 +2,7 @@ const chatProcessor = require('./chat-processor');
 const config = require('../config/app.config');
 const axios = require('axios');
 const kakaoChat = {};
+const CHANNEL_ACCESS_TOKEN = 'P57hFN2HG9TLoHCMSxClJeDKBmXRxBUY0JVlf6K74GFLFwsX/SbStJFQdzCHXrIzAL2Vxa+eYjSF44FmGl3wEsFL0uMHfjOkHry2Ae0NLWgpwo4zw/ZLCKN6/k+4X1MfVnU43Hvk1RtY/e7yiAeb/wdB04t89/1O/w1cDnyilFU=';
 
 kakaoChat.enterChatroom = (req, res) => {
 	res.status(200).json({ "type": "text" });
@@ -30,20 +31,22 @@ kakaoChat.getMessageFromUser = async (req, res) => {
 		} else {
 			userState = userState[0].state;
 			if (userState == config.USER_STATES.Q_ACTIVE) {
-				axios.post({ url: 'https://api.line.me/v2/bot/message/push', data: {
+				axios.post('https://api.line.me/v2/bot/message/push', {
 					"to":"U4dbbc044e1c125e8d45516828b12bb42",
-					"messages":[{"type":"text", "text": message.text }]
-				}, 
-				headers: {
-					'Authorization': 'Bearer ' + CHANNEL_ACCESS_TOKEN,
-					'Content-Type': 'application/json'
-				}
+					"messages":[{"type":"text", "text": `새로운 질문이 도착했어요. "${req.body.content}" 궁금증을 해결해 주세요!` }]
+				},
+				{ 
+					headers: {
+						'Authorization': 'Bearer ' + CHANNEL_ACCESS_TOKEN,
+						'Content-Type': 'application/json'
+					}
 				}).then((result) => {
 					console.log(result);
 				}).catch( ex => {
 					console.log(ex);
 				});
 			}
+
 			chatProcessor.respondMessage(req.body.user_key, userState, req.body.content, (responseMessage) => {
 				res.status(200).json({ message: { text: responseMessage }});
 			});
