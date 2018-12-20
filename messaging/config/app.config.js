@@ -22,8 +22,8 @@ module.exports = {
             MENUAL: { COMMAND: "/사용법", RESPONSE: "챗봇 기반 질의응답 플랫폼 'Qring' 사용법"}
         }
     },
-	MEMBER_SERVER_URL: "http://127.0.0.1:30060/users",
-	QNA_SERVER_URL: "http://127.0.0.1:30030/qna",
+	MEMBER_SERVER_URL: "http://127.0.0.1:8090/users",
+	QNA_SERVER_URL: "http://127.0.0.1:8545/qna",
     USER_PLATFORM: {
         LINE: 'L',
         KAKAO: 'K',
